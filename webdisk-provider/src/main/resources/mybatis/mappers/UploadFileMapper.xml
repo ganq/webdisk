@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mysoft.b2b.netdisk.mapper.UploadFileMapper">
+
+	<resultMap id="fileResult" type="com.mysoft.b2b.netdisk.api.UploadFileInfo">
+		<id property="fileId" column="file_id" />
+		<result property="filePath" column="path" />
+		<result property="createTime" column="create_time" />
+		<result property="usage" column="use_age" />
+		<result property="type" column="type" />
+	</resultMap>
+	<!-- 新增供应商对象 -->
+	<insert id="insertFile" parameterType="com.mysoft.b2b.netdisk.api.UploadFileInfo" >
+		INSERT INTO wp_upload_file(
+		file_id,
+		path,
+		use_age,
+		type,
+		create_time
+		)
+		VALUES
+		(
+		#{fileId},
+		#{filePath},
+		#{usage, jdbcType=VARCHAR},
+		#{type, jdbcType=VARCHAR},
+		#{createTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<select id="selectFile" parameterType="com.mysoft.b2b.netdisk.api.UploadFileInfo" resultMap="fileResult">
+		SELECT s.file_id,s.path,s.create_time ,s.use_age, s.type
+		FROM wp_upload_file s
+		where 1=1
+		<if test="fileId != null  ">
+			and  s.file_id = #{fileId}
+		</if>
+		limit 0,1
+	</select>
+
+
+</mapper>
